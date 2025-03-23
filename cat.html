@@ -59,7 +59,8 @@
   <h1>陳阿虫愛生氣</h1>
 </div>
 
-<audio id="sound" src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_7a3326c655.mp3?filename=click-124467.mp3"></audio>
+<!-- 音效改為 coin04.mp3 -->
+<audio id="sound" src="https://anger-cat.github.io/cat/coin04.mp3"></audio>
 
 <script>
 let count = 0;
@@ -70,7 +71,7 @@ const sound = document.getElementById('sound');
 bug.addEventListener('click', () => {
   count++;
 
-  // 播放音效
+  // 播放音效（coin04.mp3）
   sound.currentTime = 0;
   sound.play();
 
