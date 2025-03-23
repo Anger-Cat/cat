@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>小遊戲 - 點我發洩</title>
+  <title>阿虫的小遊戲</title>
   <style>
     body {
       background: #fff3f3;
@@ -18,41 +18,45 @@
       margin-top: 50px;
       transition: transform 0.2s;
     }
-    #bug:active {
-      transform: scale(0.9);
-    }
-    .fly {
+    .move {
       position: absolute;
       width: 100px;
-      animation: float 6s linear forwards;
+      animation: run 5s linear infinite alternate;
     }
-    @keyframes float {
-      0% { transform: translateY(0); opacity: 1; }
-      100% { transform: translateY(-600px); opacity: 0; }
+    .sally {
+      position: absolute;
+      width: 120px;
+      animation: run 6s linear infinite alternate;
+    }
+    @keyframes run {
+      0% { left: 0; top: 0; }
+      25% { left: 70vw; top: 10vh; }
+      50% { left: 30vw; top: 50vh; }
+      75% { left: 80vw; top: 70vh; }
+      100% { left: 10vw; top: 20vh; }
     }
     #final {
       display: none;
       margin-top: 50px;
     }
     #final img {
-      width: 150px;
-      margin: 0 20px;
+      width: 300px;
     }
     #final h1 {
-      font-size: 48px;
+      font-size: 36px;
       color: red;
+      margin-top: 20px;
     }
   </style>
 </head>
 <body>
 
-<h1>點我發洩！</h1>
+<h1>點我點我!</h1>
 <img id="bug" src="https://anger-cat.github.io/cat/bug.png" alt="小蟲">
 
 <div id="final">
-  <img src="https://anger-cat.github.io/cat/bear.png" alt="熊大">
-  <img src="https://anger-cat.github.io/cat/bear.png" alt="熊大">
-  <h1>SORRY</h1>
+  <img src="https://anger-cat.github.io/cat/to.png" alt="結尾圖">
+  <h1>陳阿虫愛生氣</h1>
 </div>
 
 <script>
@@ -63,22 +67,26 @@ const final = document.getElementById('final');
 bug.addEventListener('click', () => {
   count++;
 
-  // 生出一隻小蟲或熊大
-  const newImg = document.createElement('img');
-  newImg.classList.add('fly');
-  if (count >= 10) {
-    newImg.src = 'https://anger-cat.github.io/cat/bear.png';
-  } else {
-    newImg.src = 'https://anger-cat.github.io/cat/bug.png';
-  }
-  newImg.style.left = Math.random() * 80 + 'vw';
-  document.body.appendChild(newImg);
-
-  // 最後結束畫面
-  if (count >= 20) {
+  // 過20下顯示最終畫面
+  if (count > 20) {
+    document.querySelectorAll('.move, .sally').forEach(el => el.remove());
     bug.style.display = 'none';
     final.style.display = 'block';
+    return;
   }
+
+  // 產生蟲或莎莉
+  const newImg = document.createElement('img');
+  if (count <= 10) {
+    newImg.src = 'https://anger-cat.github.io/cat/bug.png';
+    newImg.classList.add('move');
+  } else {
+    newImg.src = 'https://anger-cat.github.io/cat/sally.png';
+    newImg.classList.add('sally');
+  }
+  newImg.style.left = Math.random() * 80 + 'vw';
+  newImg.style.top = Math.random() * 60 + 'vh';
+  document.body.appendChild(newImg);
 });
 </script>
 
