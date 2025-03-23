@@ -51,7 +51,7 @@
 </head>
 <body>
 
-<h1>點我點我!</h1>
+<h1>點我發洩！</h1>
 <img id="bug" src="https://anger-cat.github.io/cat/bug.png" alt="小蟲">
 
 <div id="final">
@@ -59,13 +59,20 @@
   <h1>陳阿虫愛生氣</h1>
 </div>
 
+<audio id="sound" src="https://cdn.pixabay.com/download/audio/2022/02/10/audio_7a3326c655.mp3?filename=click-124467.mp3"></audio>
+
 <script>
 let count = 0;
 const bug = document.getElementById('bug');
 const final = document.getElementById('final');
+const sound = document.getElementById('sound');
 
 bug.addEventListener('click', () => {
   count++;
+
+  // 播放音效
+  sound.currentTime = 0;
+  sound.play();
 
   // 過20下顯示最終畫面
   if (count > 20) {
