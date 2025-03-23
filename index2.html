@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>CNC 現場工具箱</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    button { padding: 15px 20px; font-size: 20px; width: 90%; margin: 10px auto; display: block; }
+    input, select { padding: 10px; font-size: 18px; margin: 10px 0; width: 90%; }
+    #result { font-size: 18px; margin-top: 20px; }
+    .section { display: none; }
+  </style>
+</head>
+<body>
+
+<h1>CNC 現場工具箱</h1>
+
+<!-- 功能選單 -->
+<div id="menu">
+  <button onclick="showSection('pcd')">🔘 PCD 均分孔計算</button>
+  <button onclick="showSection('feed')">🔘 銑刀進給 / 主軸轉速</button>
+  <button onclick="showSection('tap')">🔘 PT牙攻牙配速</button>
+  <button onclick="showSection('draw')">🔘 2D 簡易畫圖顯示</button>
+</div>
+
+<!-- PCD 功能 -->
+<div id="pcd" class="section">
+  <h2>PCD 均分孔計算</h2>
+  孔數：<input type="number" id="holes" placeholder="請輸入孔數">
+  PCD直徑：<input type="number" id="pcd_val" placeholder="請輸入PCD直徑">
+  <button onclick="calculatePCD()">計算</button>
+  <div id="pcd_result"></div>
+  <button onclick="backMenu()">返回選單</button>
+</div>
+
+<!-- 進給主軸功能 -->
+<div id="feed" class="section">
+  <h2>銑刀進給 / 主軸轉速</h2>
+  刀具直徑(mm)：<input type="number" id="tool_dia">
+  每齒進給(mm/tooth)：<input type="number" id="fz">
+  刀齒數：<input type="number" id="teeth">
+  切削速度(m/min)：<input type="number" id="vc">
+  <button onclick="calcFeedSpeed()">計算</button>
+  <div id="feed_result"></div>
+  <button onclick="backMenu()">返回選單</button>
+</div>
+
+<!-- PT牙功能 -->
+<div id="tap" class="section">
+  <h2>PT牙攻牙配速建議</h2>
+  PT牙規格：
+  <select id="pt_size">
+    <option value="0">請選擇</option>
+    <option value="1/8">PT 1/8</option>
+    <option value="1/4">PT 1/4</option>
+    <option value="3/8">PT 3/8</option>
+    <option value="1/2">PT 1/2</option>
+  </select>
+  <button onclick="calcTap()">計算</button>
+  <div id="tap_result"></div>
+  <button onclick="backMenu()">返回選單</button>
+</div>
+
+<!-- 簡易畫圖功能（預留） -->
+<div id="draw" class="section">
+  <h2>2D 簡易畫圖功能 (預留)</h2>
+  <p>此功能開發中...</p>
+  <button onclick="backMenu()">返回選單</button>
+</div>
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+  document.getElementById('menu').style.display = 'none';
+  document.getElementById(id).style.display = 'block';
+}
+
+function backMenu() {
+  document.querySelectorAll('.section').forEach(sec => sec.style.display = 'none');
+  document.getElementById('menu').style.display = 'block';
+}
+
+function calculatePCD() {
+  const holes = parseInt(document.getElementById('holes').value);
+  const pcd = parseFloat(document.getElementById('pcd_val').value);
+  if (isNaN(holes) || isNaN(pcd)) {
+    alert("請輸入正確數值！");
+    return;
+  }
+  let html = `<b>圓心座標：</b> X = 0, Y = 0<br><br>`;
+  const angleStep = 360 / holes;
+  for (let i = 0; i < holes; i++) {
+    const angle = angleStep * i * Math.PI / 180;
+    const x = (pcd / 2) * Math.cos(angle);
+    const y = (pcd / 2) * Math.sin(angle);
+    html += `孔 ${i + 1}：X = ${x.toFixed(3)}, Y = ${y.toFixed(3)}<br>`;
+  }
+  document.getElementById('pcd_result').innerHTML = html;
+}
+
+function calcFeedSpeed() {
+  const dia = parseFloat(document.getElementById('tool_dia').value);
+  const fz = parseFloat(document.getElementById('fz').value);
+  const teeth = parseInt(document.getElementById('teeth').value);
+  const vc = parseFloat(document.getElementById('vc').value);
+
+  if (isNaN(dia) || isNaN(fz) || isNaN(teeth) || isNaN(vc)) {
+    alert("請輸入正確數值！");
+    return;
+  }
+
+  const n = (vc * 1000) / (Math.PI * dia); // 主軸轉速rpm
+  const f = fz * teeth * n;               // 進給量mm/min
+
+  document.getElementById('feed_result').innerHTML = `主軸轉速：${n.toFixed(0)} rpm<br>進給量：${f.toFixed(0)} mm/min`;
+}
+
+function calcTap() {
+  const pt = document.getElementById('pt_size').value;
+  let result = '';
+  switch(pt) {
+    case "1/8": result = "建議轉速 800~1000 rpm"; break;
+    case "1/4": result = "建議轉速 600~800 rpm"; break;
+    case "3/8": result = "建議轉速 400~600 rpm"; break;
+    case "1/2": result = "建議轉速 300~500 rpm"; break;
+    default: result = "請選擇牙規格";
+  }
+  document.getElementById('tap_result').innerHTML = result;
+}
+</script>
+
+</body>
+</html>
