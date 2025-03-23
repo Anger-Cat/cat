@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>PCD 計算器</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    input, button { padding: 10px; margin: 5px; }
+    #result { margin-top: 20px; font-size: 18px; }
+  </style>
+</head>
+<body>
+
+<h2>PCD 計算器</h2>
+孔數：<input type="number" id="holes" placeholder="請輸入孔數"><br>
+PCD直徑：<input type="number" id="pcd" placeholder="請輸入PCD直徑"><br>
+<button onclick="calculate()">計算</button>
+
+<div id="result"></div>
+
+<script>
+function calculate() {
+  const holes = parseInt(document.getElementById('holes').value);
+  const pcd = parseFloat(document.getElementById('pcd').value);
+  if (isNaN(holes) || isNaN(pcd)) {
+    alert("請輸入正確數值！");
+    return;
+  }
+
+  let html = "";
+  const angleStep = 360 / holes;
+  for (let i = 0; i < holes; i++) {
+    const angle = angleStep * i * Math.PI / 180;
+    const x = (pcd / 2) * Math.cos(angle);
+    const y = (pcd / 2) * Math.sin(angle);
+    html += `孔 ${i + 1}：X = ${x.toFixed(3)}, Y = ${y.toFixed(3)}<br>`;
+  }
+  document.getElementById('result').innerHTML = html;
+}
+</script>
+
+</body>
+</html>
