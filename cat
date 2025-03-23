@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>給妳的小驚喜</title>
+  <style>
+    body {
+      background-color: #ffe6f0;
+      text-align: center;
+      font-family: "微軟正黑體", sans-serif;
+      overflow: hidden;
+    }
+    h1 {
+      color: #d6336c;
+      margin-top: 50px;
+    }
+    #bear {
+      width: 200px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    #bear:active {
+      transform: scale(0.9) rotate(-10deg);
+    }
+    #message {
+      font-size: 24px;
+      color: #cc3366;
+      margin-top: 30px;
+      height: 50px;
+    }
+    .heart {
+      position: absolute;
+      color: #ff5c8a;
+      animation: floatUp 3s linear forwards;
+      font-size: 24px;
+    }
+    @keyframes floatUp {
+      0% {opacity: 1; transform: translateY(0);}
+      100% {opacity: 0; transform: translateY(-200px);}
+    }
+  </style>
+</head>
+<body>
+
+<h1>點我一下看看～</h1>
+<img id="bear" src="https://stickershop.line-scdn.net/stickershop/v1/sticker/263711269/android/sticker.png" alt="熊大">
+
+<div id="message"></div>
+<audio id="bgm" src="https://cdn.pixabay.com/download/audio/2023/03/14/audio_19a7642e3e.mp3?filename=cute-145008.mp3" autoplay loop></audio>
+
+<script>
+const bear = document.getElementById('bear');
+const message = document.getElementById('message');
+const bgm = document.getElementById('bgm');
+bgm.volume = 0.4;
+
+let text = "其實啊，我一直都有想妳…";
+let index = 0;
+
+function showText() {
+  if (index < text.length) {
+    message.innerHTML += text[index];
+    index++;
+    setTimeout(showText, 150);
+  }
+}
+
+showText();
+
+bear.addEventListener('click', () => {
+  alert('笨蛋，怎麼這麼可愛！');
+  spawnHeart();
+});
+
+function spawnHeart() {
+  const heart = document.createElement('div');
+  heart.classList.add('heart');
+  heart.style.left = Math.random() * 100 + 'vw';
+  heart.innerText = '❤️';
+  document.body.appendChild(heart);
+  setTimeout(() => heart.remove(), 3000);
+}
+
+// 隨機飄愛心
+setInterval(spawnHeart, 1500);
+</script>
+
+</body>
+</html>
