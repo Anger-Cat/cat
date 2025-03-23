@@ -3,87 +3,83 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>給妳的小驚喜</title>
+  <title>小遊戲 - 點我發洩</title>
   <style>
     body {
-      background-color: #ffe6f0;
+      background: #fff3f3;
       text-align: center;
       font-family: "微軟正黑體", sans-serif;
       overflow: hidden;
+      position: relative;
     }
-    h1 {
-      color: #d6336c;
+    #bug {
+      width: 150px;
+      cursor: pointer;
+      margin-top: 50px;
+      transition: transform 0.2s;
+    }
+    #bug:active {
+      transform: scale(0.9);
+    }
+    .fly {
+      position: absolute;
+      width: 100px;
+      animation: float 6s linear forwards;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); opacity: 1; }
+      100% { transform: translateY(-600px); opacity: 0; }
+    }
+    #final {
+      display: none;
       margin-top: 50px;
     }
-    #bear {
-      width: 200px;
-      cursor: pointer;
-      transition: transform 0.1s;
+    #final img {
+      width: 150px;
+      margin: 0 20px;
     }
-    #bear:active {
-      transform: scale(0.9) rotate(-10deg);
-    }
-    #message {
-      font-size: 24px;
-      color: #cc3366;
-      margin-top: 30px;
-      height: 50px;
-    }
-    .heart {
-      position: absolute;
-      color: #ff5c8a;
-      animation: floatUp 3s linear forwards;
-      font-size: 24px;
-    }
-    @keyframes floatUp {
-      0% {opacity: 1; transform: translateY(0);}
-      100% {opacity: 0; transform: translateY(-200px);}
+    #final h1 {
+      font-size: 48px;
+      color: red;
     }
   </style>
 </head>
 <body>
 
-<h1>點我一下看看～</h1>
-<img id="bear" src="https://stickershop.line-scdn.net/stickershop/v1/sticker/263711269/android/sticker.png" alt="熊大">
+<h1>點我發洩！</h1>
+<img id="bug" src="https://anger-cat.github.io/cat/bug.png" alt="小蟲">
 
-<div id="message"></div>
-<audio id="bgm" src="https://cdn.pixabay.com/download/audio/2023/03/14/audio_19a7642e3e.mp3?filename=cute-145008.mp3" autoplay loop></audio>
+<div id="final">
+  <img src="https://anger-cat.github.io/cat/bear.png" alt="熊大">
+  <img src="https://anger-cat.github.io/cat/bear.png" alt="熊大">
+  <h1>SORRY</h1>
+</div>
 
 <script>
-const bear = document.getElementById('bear');
-const message = document.getElementById('message');
-const bgm = document.getElementById('bgm');
-bgm.volume = 0.4;
+let count = 0;
+const bug = document.getElementById('bug');
+const final = document.getElementById('final');
 
-let text = "其實啊，我一直都有想妳…";
-let index = 0;
+bug.addEventListener('click', () => {
+  count++;
 
-function showText() {
-  if (index < text.length) {
-    message.innerHTML += text[index];
-    index++;
-    setTimeout(showText, 150);
+  // 生出一隻小蟲或熊大
+  const newImg = document.createElement('img');
+  newImg.classList.add('fly');
+  if (count >= 10) {
+    newImg.src = 'https://anger-cat.github.io/cat/bear.png';
+  } else {
+    newImg.src = 'https://anger-cat.github.io/cat/bug.png';
   }
-}
+  newImg.style.left = Math.random() * 80 + 'vw';
+  document.body.appendChild(newImg);
 
-showText();
-
-bear.addEventListener('click', () => {
-  alert('笨蛋，怎麼這麼可愛！');
-  spawnHeart();
+  // 最後結束畫面
+  if (count >= 20) {
+    bug.style.display = 'none';
+    final.style.display = 'block';
+  }
 });
-
-function spawnHeart() {
-  const heart = document.createElement('div');
-  heart.classList.add('heart');
-  heart.style.left = Math.random() * 100 + 'vw';
-  heart.innerText = '❤️';
-  document.body.appendChild(heart);
-  setTimeout(() => heart.remove(), 3000);
-}
-
-// 隨機飄愛心
-setInterval(spawnHeart, 1500);
 </script>
 
 </body>
